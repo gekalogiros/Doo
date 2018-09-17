@@ -7,13 +7,13 @@ import (
 )
 
 const (
-	ADD_SUB_COMMAND        = "add"
-	ADD_DESCRIPTION_OPTION = "d"
-	ADD_DUE_DATE_OPTION    = "dd"
+	AddSubCommand        = "add"
+	AddDescriptionOption = "d"
+	AddDueDateOption     = "dd"
 
-	REMOVE_SUB_COMMAND  = "rm"
-	REMOVE_DATE_OPTION  = "d"
-	REMOVE_FORCE_OPTION = "f"
+	RemoveSubCommand  = "rm"
+	RemoveDateOption  = "d"
+	RemoveForceOption = "f"
 )
 
 type AddCommandOptions struct {
@@ -35,16 +35,16 @@ func (o RemoveCommandOptions) valid() bool {
 }
 
 func main() {
-	addCommand := flag.NewFlagSet(ADD_SUB_COMMAND, flag.ExitOnError)
-	todoDescriptionPointer := addCommand.String(ADD_DESCRIPTION_OPTION, "", "to-do description (Required)")
-	todoDatePointer := addCommand.String(ADD_DUE_DATE_OPTION, "", "to-do due date (Required)")
+	addCommand := flag.NewFlagSet(AddSubCommand, flag.ExitOnError)
+	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "to-do description (Required)")
+	todoDatePointer := addCommand.String(AddDueDateOption, "", "to-do due date (Required)")
 
-	removeCommand := flag.NewFlagSet(REMOVE_SUB_COMMAND, flag.ExitOnError)
-	removeDatePointer := removeCommand.String(REMOVE_DATE_OPTION, "", "Date of the note that you'd like to delete (Required)")
-	removeForcePointer := removeCommand.Bool(REMOVE_FORCE_OPTION, false, "Force remove all notes for a certain date")
+	removeCommand := flag.NewFlagSet(RemoveSubCommand, flag.ExitOnError)
+	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the note that you'd like to delete (Required)")
+	removeForcePointer := removeCommand.Bool(RemoveForceOption, false, "Force remove all notes for a certain date")
 
 	if len(os.Args) < 2 {
-		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s", ADD_SUB_COMMAND, REMOVE_SUB_COMMAND))
+		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s", AddSubCommand, RemoveSubCommand))
 		os.Exit(1)
 	}
 
