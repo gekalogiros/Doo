@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	ERROR_MESSAGE_TEMPLATE = "%s, Check documentation at github.com/gekalogiros/doo"
+	errorMessageTemplate = "%s, Check documentation at github.com/gekalogiros/Doo"
 )
 
 var notesDao dao.NotesDao = dao.NewFileSystemNotesDao()
@@ -28,7 +28,7 @@ func (a additionEnquiry) execute(){
 
 	if error != nil {
 		err := fmt.Sprintf("Invalid due date format provided: %s", date)
-		log.Fatal(fmt.Sprintf(ERROR_MESSAGE_TEMPLATE, err))
+		log.Fatal(fmt.Sprintf(errorMessageTemplate, err))
 	}
 
 	note := model.NewNote(a.description, date)
@@ -50,7 +50,7 @@ func (r pastDateRemovalEnquiry) execute(){
 
 	if error != nil {
 		err := fmt.Sprintf("Invalid removal date provided: %s", date)
-		log.Fatal(fmt.Sprintf(ERROR_MESSAGE_TEMPLATE, err))
+		log.Fatal(fmt.Sprintf(errorMessageTemplate, err))
 	}
 
 	notesDao.RemoveAll(date)
