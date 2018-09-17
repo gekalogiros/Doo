@@ -17,7 +17,7 @@ $ doo add -d "I am a todo task" -dd 10d
 
 - Remove Notes for a certain date
 ```
-$ doo rm -dd 17-09-2018 -f
+$ doo rm -dt 17-09-2018 -f
 ```
 
 ## Due Date Formats Allowed (--dd flag)

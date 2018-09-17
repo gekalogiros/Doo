@@ -12,7 +12,7 @@ const (
 	AddDueDateOption     = "dd"
 
 	RemoveSubCommand  = "rm"
-	RemoveDateOption  = "d"
+	RemoveDateOption  = "dt"
 	RemoveForceOption = "f"
 )
 
