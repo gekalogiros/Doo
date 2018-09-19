@@ -2,7 +2,7 @@ package dao
 
 import (
 	"fmt"
-	"github.com/gekalogiros/todo/model"
+	"github.com/gekalogiros/Doo/model"
 	"log"
 	"os"
 	"path"
@@ -55,9 +55,7 @@ func (f filesystem) Save(n *model.Task)  {
 
 func (f filesystem) RemoveAll(date time.Time)  {
 	if _, err := os.Stat(f.configDir); os.IsNotExist(err) {
-
 			log.Fatal("Cannot create or access config directory")
-
 	}
 }
 

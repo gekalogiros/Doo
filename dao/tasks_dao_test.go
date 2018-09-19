@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/gekalogiros/todo/model"
+	"github.com/gekalogiros/Doo/model"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/gekalogiros/todo/dao"
-	"github.com/gekalogiros/todo/model"
+	"github.com/gekalogiros/Doo/dao"
+	"github.com/gekalogiros/Doo/model"
 	"log"
 	"time"
 )
@@ -46,11 +46,9 @@ func NewTaskListRemoval(date string) taskListRemoval {
 
 func (r taskListRemoval) execute(){
 
-	now := time.Now()
-
 	date, error := time.Parse("02-01-2006", r.date)
 
-	if date.After(now) || error != nil {
+	if error != nil {
 		err := fmt.Sprintf("Invalid removal date provided: %s", date)
 		log.Fatal(fmt.Sprintf(errorMessageTemplate, err))
 	}

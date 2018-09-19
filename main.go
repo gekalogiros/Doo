@@ -45,8 +45,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(os.Args)
-
 	switch os.Args[1] {
 	case "add":
 		addCommand.Parse(os.Args[2:])
