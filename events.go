@@ -12,7 +12,7 @@ const (
 	errorMessageTemplate = "%s, Check documentation at github.com/gekalogiros/Doo"
 )
 
-var notesDao dao.TaskDao = dao.NewFileSystemNotesDao()
+var notesDao dao.TaskDao = dao.NewFileSystemTasksDao()
 
 type taskCreation struct {
 	dueDate string
