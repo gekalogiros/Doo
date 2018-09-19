@@ -1,4 +1,4 @@
-package main
+package commands
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ func ResolveDueDate(dueDate string) (time.Time, error) {
 	case timeUnitRegex.MatchString(dueDate):
 		return resolveByExpression(dueDate)
 	case periodRegex.MatchString(dueDate):
-		return resolveByNumberOfDays(dueDate)
+		return resolveByNumber(dueDate)
 	default:
 		return resolveByDate(dueDate)
 	}
@@ -61,7 +61,7 @@ func resolveByDate(date string) (time.Time, error) {
 	return time.Now(), fmt.Errorf("failed to parse date: %s", date)
 }
 
-func resolveByNumberOfDays(numberOfDays string) (time.Time, error) {
+func resolveByNumber(numberOfDays string) (time.Time, error) {
 
 	today := time.Now()
 

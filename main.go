@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"github.com/gekalogiros/Doo/commands"
 )
 
 const (
@@ -53,6 +54,7 @@ func (l ListCommandOptions) valid() bool {
 }
 
 func main() {
+
 	addCommand := flag.NewFlagSet(AddSubCommand, flag.ExitOnError)
 	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "task description (Required)")
 	todoDatePointer := addCommand.String(AddDueDateOption, "", "task due date (Required)")
@@ -89,7 +91,7 @@ func main() {
 			os.Exit(1)
 		}
 
-		NewTaskCreation(options.date, options.desc).execute()
+		commands.NewTaskCreation(options.date, options.desc).Execute()
 	}
 
 	if removeCommand.Parsed() {
@@ -101,10 +103,11 @@ func main() {
 			os.Exit(2)
 		}
 
-		NewTaskListRemoval(options.date).execute()
+		commands.NewTaskListRemoval(options.date).Execute()
 	}
 
 	if listCommand.Parsed() {
+
 		options := ListCommandOptions{date: *listDatePointer}
 
 		if !options.valid() {
@@ -112,6 +115,6 @@ func main() {
 			os.Exit(3)
 		}
 
-		NewTaskListRetrieval(options.date).execute()
+		commands.NewTaskListRetrieval(options.date).Execute()
 	}
 }
