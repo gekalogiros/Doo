@@ -1,8 +1,11 @@
 package dao
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
 	"github.com/gekalogiros/Doo/model"
+	"io"
 	"log"
 	"os"
 	"path"
@@ -12,6 +15,7 @@ import (
 type TaskDao interface {
 	Save(n *model.Task)
 	RemoveAll(date time.Time)
+	RetrieveAllByDate(date time.Time) []string
 }
 
 type filesystem struct {
@@ -32,11 +36,23 @@ func newFilesystemDao(configFile string) filesystem {
 }
 
 func (f filesystem) ensureConfigDirectoryIsPresent() {
-	if _, err := os.Stat(f.configDir); os.IsNotExist(err) {
-		err = os.MkdirAll(f.configDir, 0755)
+	if !f.configDirectoryExists() {
+		err := os.MkdirAll(f.configDir, 0755)
 		if err != nil {
 			log.Fatal("Cannot create or access config directory")
 		}
+	}
+}
+
+func (f filesystem) configDirectoryExists() bool {
+	return f.directoryExists(f.configDir)
+}
+
+func (f filesystem) directoryExists(path string) bool {
+	if _, err := os.Stat(f.configDir); os.IsNotExist(err) {
+		return false;
+	} else {
+		return true;
 	}
 }
 
@@ -54,11 +70,53 @@ func (f filesystem) Save(n *model.Task) {
 
 	defer fd.Close()
 
-	if _, err = fd.WriteString(fmt.Sprintf("%s,%s", n.Id, n.Description)); err != nil {
+	if _, err = fd.WriteString(fmt.Sprintf("%s,%s\n", n.Id, n.Description)); err != nil {
 		log.Fatal(fmt.Sprintf("Cannot write task %s", n))
 	}
 }
 
 func (f filesystem) RemoveAll(date time.Time) {
 	// TODO
+}
+
+func (f filesystem) RetrieveAllByDate(date time.Time) []string {
+	path := path.Join(f.configDir, date.Format(f.fileFormat))
+	if f.configDirectoryExists() && f.directoryExists(path) {
+		tasks, error := readLines(path)
+		if error != nil {
+			log.Fatal("Failed to retrieve task list")
+		} else {
+			return tasks
+		}
+	}
+	return []string{}
+}
+
+func readLines(path string) (lines []string, err error) {
+	var (
+		file *os.File
+		part []byte
+		prefix bool
+	)
+	if file, err = os.Open(path); err != nil {
+		return
+	}
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+	buffer := bytes.NewBuffer(make([]byte, 0))
+	for {
+		if part, prefix, err = reader.ReadLine(); err != nil {
+			break
+		}
+		buffer.Write(part)
+		if !prefix {
+			lines = append(lines, buffer.String())
+			buffer.Reset()
+		}
+	}
+	if err == io.EOF {
+		err = nil
+	}
+	return
 }
