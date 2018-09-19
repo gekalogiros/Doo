@@ -18,9 +18,9 @@ func TestFilesystem_Save(t *testing.T) {
 
 	dao := newFilesystemDao(configDir)
 
-	note := model.NewNote("I am a test note", now)
+	task := model.NewTask("I am a test task", now)
 
-	dao.Save(&note)
+	dao.Save(&task)
 
 	notesFilename := path.Join(configDir, now.Format("02_01_2006"))
 
@@ -30,5 +30,5 @@ func TestFilesystem_Save(t *testing.T) {
 
 	assert.NoError(t, error)
 
-	assert.Contains(t, string(contentAsBytes), note.Description)
+	assert.Contains(t, string(contentAsBytes), task.Description)
 }

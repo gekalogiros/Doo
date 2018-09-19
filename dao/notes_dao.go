@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-type NotesDao interface {
-	Save(n *model.Note)
+type TaskDao interface {
+	Save(n *model.Task)
 	RemoveAll(date time.Time)
 }
 
@@ -18,7 +18,7 @@ type filesystem struct {
 	configDir string
 }
 
-func NewFileSystemNotesDao() NotesDao {
+func NewFileSystemNotesDao() TaskDao {
 	configDir := path.Join(os.Getenv("HOME"), ".doo")
 	return newFilesystemDao(configDir)
 }
@@ -29,7 +29,7 @@ func newFilesystemDao(configFile string) filesystem {
 	}
 }
 
-func (f filesystem) Save(n *model.Note)  {
+func (f filesystem) Save(n *model.Task)  {
 
 	if _, err := os.Stat(f.configDir); os.IsNotExist(err) {
 		err = os.MkdirAll(f.configDir, 0755)

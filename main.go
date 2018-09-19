@@ -11,9 +11,8 @@ const (
 	AddDescriptionOption = "d"
 	AddDueDateOption     = "dd"
 
-	RemoveSubCommand  = "rm"
-	RemoveDateOption  = "dt"
-	RemoveForceOption = "f"
+	RemoveSubCommand = "rm"
+	RemoveDateOption = "dt"
 )
 
 type AddCommandOptions struct {
@@ -26,8 +25,7 @@ func (o AddCommandOptions) valid() bool {
 }
 
 type RemoveCommandOptions struct {
-	date  string
-	force bool
+	date string
 }
 
 func (o RemoveCommandOptions) valid() bool {
@@ -36,12 +34,11 @@ func (o RemoveCommandOptions) valid() bool {
 
 func main() {
 	addCommand := flag.NewFlagSet(AddSubCommand, flag.ExitOnError)
-	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "to-do description (Required)")
-	todoDatePointer := addCommand.String(AddDueDateOption, "", "to-do due date (Required)")
+	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "task description (Required)")
+	todoDatePointer := addCommand.String(AddDueDateOption, "", "task due date (Required)")
 
 	removeCommand := flag.NewFlagSet(RemoveSubCommand, flag.ExitOnError)
-	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the note that you'd like to delete (Required)")
-	removeForcePointer := removeCommand.Bool(RemoveForceOption, false, "Force remove all notes for a certain date")
+	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete (Required)")
 
 	if len(os.Args) < 2 {
 		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s", AddSubCommand, RemoveSubCommand))
@@ -69,20 +66,18 @@ func main() {
 			os.Exit(1)
 		}
 
-		NewAdditionEnquiry(options.date, options.desc).execute()
+		newTaskCreation(options.date, options.desc).execute()
 	}
 
 	if removeCommand.Parsed() {
 
-		options := RemoveCommandOptions{date: *removeDatePointer, force: *removeForcePointer}
+		options := RemoveCommandOptions{date: *removeDatePointer}
 
 		if !options.valid() {
 			removeCommand.PrintDefaults()
 			os.Exit(2)
 		}
 
-		if options.force {
-			NewPastDateRemovalEnquiry(options.date).execute()
-		}
+		NewTaskListRemoval(options.date).execute()
 	}
 }
