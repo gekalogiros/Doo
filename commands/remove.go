@@ -3,19 +3,14 @@ package commands
 import (
 	"fmt"
 	"github.com/gekalogiros/Doo/dao"
-	"log"
 	"time"
-)
-
-const (
-	errorMessageTemplate = "%s, Check documentation at github.com/gekalogiros/Doo"
 )
 
 type taskListRemoval struct {
 	date string
 }
 
-func NewTaskListRemoval(date string) taskListRemoval {
+func NewTaskListRemoval(date string) Command {
 	return taskListRemoval{date: date}
 }
 
@@ -25,10 +20,7 @@ func (r taskListRemoval) Execute() {
 
 	date, error := time.Parse("02-01-2006", r.date)
 
-	if error != nil {
-		err := fmt.Sprintf("Invalid removal date provided: %s", date)
-		log.Fatal(fmt.Sprintf(errorMessageTemplate, err))
-	}
+	failIfError(error, fmt.Sprintf("Invalid removal date provided: %s", date))
 
 	tasksDao.RemoveAll(date)
 }

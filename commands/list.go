@@ -11,7 +11,7 @@ type taskListRetrieval struct {
 	date string
 }
 
-func NewTaskListRetrieval(date string) taskListRetrieval {
+func NewTaskListRetrieval(date string) Command {
 	return taskListRetrieval{date: date}
 }
 
@@ -21,10 +21,7 @@ func (lr taskListRetrieval) Execute() {
 
 	date, error := time.Parse("02-01-2006", lr.date)
 
-	if error != nil {
-		err := fmt.Sprintf("Invalid retrieval date provided: %s", date)
-		log.Fatal(fmt.Sprintf(errorMessageTemplate, err))
-	}
+	failIfError(error, fmt.Sprintf("Invalid retrieval date provided: %s", date))
 
 	tasks := tasksDao.RetrieveAllByDate(date)
 

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gekalogiros/Doo/dao"
 	"github.com/gekalogiros/Doo/model"
-	"log"
 )
 
 type taskCreation struct {
@@ -12,7 +11,7 @@ type taskCreation struct {
 	description string
 }
 
-func NewTaskCreation(dueDate string, description string) taskCreation {
+func NewTaskCreation(dueDate string, description string) Command {
 	return taskCreation{dueDate: dueDate, description: description}
 }
 
@@ -22,10 +21,7 @@ func (c taskCreation) Execute() {
 
 	date, error := ResolveDueDate(c.dueDate)
 
-	if error != nil {
-		err := fmt.Sprintf("Invalid due date format provided: %s", date)
-		log.Fatal(fmt.Sprintf(errorMessageTemplate, err))
-	}
+	failIfError(error, fmt.Sprintf("Invalid due date format provided: %s", date))
 
 	note := model.NewTask(c.description, date)
 
