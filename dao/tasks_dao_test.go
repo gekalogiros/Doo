@@ -11,24 +11,21 @@ import (
 )
 
 var now = time.Now()
+var configDir = os.TempDir()
+var task = model.NewTask("I am a test task", now)
+var underTest = newFilesystemDao(configDir)
 
 func TestFilesystem_Save(t *testing.T) {
 
-	configDir := os.TempDir()
-
-	dao := newFilesystemDao(configDir)
-
-	task := model.NewTask("I am a test task", now)
-
-	dao.Save(&task)
+	underTest.Save(&task)
 
 	notesFilename := path.Join(configDir, now.Format("02_01_2006"))
 
 	assert.FileExists(t, notesFilename)
 
-	contentAsBytes, error := ioutil.ReadFile(notesFilename)
+	contentAsBytes, err := ioutil.ReadFile(notesFilename)
 
-	assert.NoError(t, error)
+	assert.NoError(t, err)
 
 	assert.Contains(t, string(contentAsBytes), task.Description)
 }

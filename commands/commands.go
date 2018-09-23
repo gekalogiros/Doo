@@ -1,20 +1,9 @@
 package commands
 
-import (
-	"fmt"
-	"log"
-)
+import "github.com/gekalogiros/Doo/dao"
 
-const (
-	errorMessageTemplate = "%s, Check documentation at github.com/gekalogiros/Doo"
-)
+var tasksDao = dao.NewFileSystemTasksDao() // needs DI
 
 type Command interface {
-	Execute()
-}
-
-func failIfError(err error, message string){
-	if err != nil {
-		log.Fatal(fmt.Sprintf(errorMessageTemplate, message))
-	}
+	Execute() error
 }

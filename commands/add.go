@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"github.com/gekalogiros/Doo/dao"
 	"github.com/gekalogiros/Doo/model"
 )
 
@@ -15,15 +14,18 @@ func NewTaskCreation(dueDate string, description string) Command {
 	return taskCreation{dueDate: dueDate, description: description}
 }
 
-func (c taskCreation) Execute() {
+func (c taskCreation) Execute() error {
 
-	var tasksDao dao.TaskDao = dao.NewFileSystemTasksDao() //DI
+	if date, err := ResolveDueDate(c.dueDate); err != nil {
 
-	date, error := ResolveDueDate(c.dueDate)
+		return fmt.Errorf("invalid due date format provided: %s", c.dueDate)
 
-	failIfError(error, fmt.Sprintf("Invalid due date format provided: %s", date))
+	} else {
 
-	note := model.NewTask(c.description, date)
+		note := model.NewTask(c.description, date)
 
-	tasksDao.Save(&note)
+		tasksDao.Save(&note)
+
+		return nil
+	}
 }

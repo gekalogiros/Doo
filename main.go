@@ -3,12 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/gekalogiros/Doo/commands"
+	"log"
 	"os"
 	"time"
-	"github.com/gekalogiros/Doo/commands"
 )
 
 const (
+	errorMessageTemplate = "%s, Check documentation at github.com/gekalogiros/Doo"
+
 	AddSubCommand        = "add"
 	AddDescriptionOption = "d"
 	AddDueDateOption     = "dd"
@@ -20,33 +23,37 @@ const (
 	ListDateOption = "dt"
 )
 
+type Options interface {
+	valid() bool
+}
+
 type AddCommandOptions struct {
-	desc string
-	date string
+	desc *string
+	date *string
 }
 
 func (o AddCommandOptions) valid() bool {
-	return o.desc != "" && o.date != ""
+	return *o.desc != "" && *o.date != ""
 }
 
 type RemoveCommandOptions struct {
-	date string
+	date *string
 }
 
 func (o RemoveCommandOptions) valid() bool {
-	return o.date != ""
+	return *o.date != ""
 }
 
 type ListCommandOptions struct {
-	date string
+	date *string
 }
 
 func (l ListCommandOptions) valid() bool {
-	if l.date == "" {
+	if *l.date == "" {
 		return false
 	}
 
-	if _, err := time.Parse("02-01-2006", l.date); err != nil {
+	if _, err := time.Parse("02-01-2006", *l.date); err != nil {
 		return false
 	}
 
@@ -73,10 +80,13 @@ func main() {
 	switch os.Args[1] {
 	case AddSubCommand:
 		addCommand.Parse(os.Args[2:])
+		break
 	case RemoveSubCommand:
 		removeCommand.Parse(os.Args[2:])
+		break
 	case ListSubCommnad:
 		listCommand.Parse(os.Args[2:])
+		break
 	default:
 		flag.PrintDefaults()
 		os.Exit(1)
@@ -84,37 +94,41 @@ func main() {
 
 	if addCommand.Parsed() {
 
-		options := AddCommandOptions{date: *todoDatePointer, desc: *todoDescriptionPointer}
+		options := AddCommandOptions{date: todoDatePointer, desc: todoDescriptionPointer}
 
-		if !options.valid() {
-			addCommand.PrintDefaults()
-			os.Exit(1)
-		}
-
-		commands.NewTaskCreation(options.date, options.desc).Execute()
+		checkArgumentsAndExecute(*addCommand, options, commands.NewTaskCreation(*options.date, *options.desc))
 	}
 
 	if removeCommand.Parsed() {
 
-		options := RemoveCommandOptions{date: *removeDatePointer}
+		options := RemoveCommandOptions{date: removeDatePointer}
 
-		if !options.valid() {
-			removeCommand.PrintDefaults()
-			os.Exit(2)
-		}
-
-		commands.NewTaskListRemoval(options.date).Execute()
+		checkArgumentsAndExecute(*removeCommand, options, commands.NewTaskListRemoval(*options.date))
 	}
 
 	if listCommand.Parsed() {
 
-		options := ListCommandOptions{date: *listDatePointer}
+		options := ListCommandOptions{date: listDatePointer}
 
-		if !options.valid() {
-			listCommand.PrintDefaults()
-			os.Exit(3)
-		}
+		checkArgumentsAndExecute(*listCommand, options, commands.NewTaskListRetrieval(*options.date))
+	}
 
-		commands.NewTaskListRetrieval(options.date).Execute()
+	os.Exit(0)
+}
+
+func checkArgumentsAndExecute(flagSet flag.FlagSet, options Options, command commands.Command) {
+
+	if !options.valid() {
+		flagSet.PrintDefaults()
+		os.Exit(3)
+	}
+
+	executeOrFail(command)
+}
+
+func executeOrFail(command commands.Command) {
+
+	if err := command.Execute(); err != nil {
+		log.Fatal(fmt.Sprintf(errorMessageTemplate, err.Error()))
 	}
 }

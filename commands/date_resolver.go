@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	timeUnitRegex      = regexp.MustCompile("^[0-9]+(d|m|y|D|M|Y){1}$")
+	timeUnitRegex      = regexp.MustCompile("^[0-9]+(d|m|y|D|M|Y)$")
 	periodRegex        = regexp.MustCompile("^[0-9]+$")
 	allowedDateFormats = [...]string{
 		"02/01/2006", "2/1/2006", "02/01/06", "2/1/06",
@@ -31,9 +31,9 @@ func resolveByExpression(expression string) (time.Time, error) {
 
 	today := time.Now()
 
-	period, error := toInt(expression[:len(expression)-1])
-	if error != nil {
-		return time.Now(), error
+	period, err := toInt(expression[:len(expression)-1])
+	if err != nil {
+		return time.Now(), err
 	}
 
 	periodType := strings.ToLower(expression[len(expression)-1:])
@@ -75,8 +75,8 @@ func resolveByNumber(numberOfDays string) (time.Time, error) {
 }
 
 func toInt(time string) (int, error) {
-	i, error := strconv.Atoi(time)
-	if error != nil {
+	i, err := strconv.Atoi(time)
+	if err != nil {
 		return 0, fmt.Errorf("time period %s is too long", time)
 	}
 	return i, nil

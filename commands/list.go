@@ -2,8 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"github.com/gekalogiros/Doo/dao"
-	"log"
 	"time"
 )
 
@@ -15,17 +13,20 @@ func NewTaskListRetrieval(date string) Command {
 	return taskListRetrieval{date: date}
 }
 
-func (lr taskListRetrieval) Execute() {
+func (lr taskListRetrieval) Execute() error {
 
-	var tasksDao dao.TaskDao = dao.NewFileSystemTasksDao() //DI
+	if date, err := time.Parse("02-01-2006", lr.date); err != nil {
 
-	date, error := time.Parse("02-01-2006", lr.date)
+		return fmt.Errorf("invalid retrieval date provided: %s", lr.date)
 
-	failIfError(error, fmt.Sprintf("Invalid retrieval date provided: %s", date))
+	} else {
 
-	tasks := tasksDao.RetrieveAllByDate(date)
+		tasks := tasksDao.RetrieveAllByDate(date)
 
-	for _, task := range tasks {
-		log.Println(task)
+		for _, task := range tasks {
+			fmt.Println(task)
+		}
+
+		return nil
 	}
 }

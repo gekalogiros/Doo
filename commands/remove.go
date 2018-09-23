@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"github.com/gekalogiros/Doo/dao"
 	"time"
 )
 
@@ -14,13 +13,16 @@ func NewTaskListRemoval(date string) Command {
 	return taskListRemoval{date: date}
 }
 
-func (r taskListRemoval) Execute() {
+func (r taskListRemoval) Execute() error {
 
-	var tasksDao dao.TaskDao = dao.NewFileSystemTasksDao() //DI
+	if date, err := time.Parse("02-01-2006", r.date); err != nil {
 
-	date, error := time.Parse("02-01-2006", r.date)
+		return fmt.Errorf("invalid removal date provided: %s", date)
 
-	failIfError(error, fmt.Sprintf("Invalid removal date provided: %s", date))
+	} else {
 
-	tasksDao.RemoveAll(date)
+		tasksDao.RemoveAll(date)
+
+		return nil
+	}
 }
