@@ -8,7 +8,19 @@ The idea of crafting this app came after attended the "7 Principles of Productiv
 
 ***IMPORTANT:***
 
-This project is not projection ready yet. 
+This project is under development
+
+## Motivation
+
+The terminal is the control hub for many dev systems. 
+
+Doo aims to be a good companion to developers and system administrators or just people who want to control stuff from the command line. 
+
+Doo aims to be an effective tool that stores the points you'd like to discuss in your daily stand-ups, light tasks that you have to complete or phone calls that you need to make. It actually uses the filesystem to do it. It is as easy as it gets.
+
+Doo has not been designed to be dead simple. It is supposed to be something quick and dirty for tracking tasks of minor importance. 
+
+There are plenty of amazing and rich featured task management apps out there. All of them are definitely better than Doo. However, if your lack of discipline prevented you from making them an integral part of your daily routine, give Doo a go.
 
 ## Usage
 

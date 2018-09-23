@@ -64,7 +64,7 @@ func main() {
 
 	addCommand := flag.NewFlagSet(AddSubCommand, flag.ExitOnError)
 	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "task description (Required)")
-	todoDatePointer := addCommand.String(AddDueDateOption, "", "task due date (Required)")
+	todoDatePointer := addCommand.String(AddDueDateOption, "0d", "task due date")
 
 	removeCommand := flag.NewFlagSet(RemoveSubCommand, flag.ExitOnError)
 	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete (Required)")
@@ -93,6 +93,12 @@ func main() {
 	}
 
 	if addCommand.Parsed() {
+
+		args := addCommand.Args()
+
+		if len(args) == 1 && flag.Lookup(AddDescriptionOption) == nil {
+			todoDescriptionPointer = &args[0]
+		}
 
 		options := AddCommandOptions{date: todoDatePointer, desc: todoDescriptionPointer}
 
