@@ -3,22 +3,21 @@ go:
 - '1.11'
 
 before_install:
-- go get github.com/mitchellh/gox
+  - go get github.com/mitchellh/gox
 
 install:
-- go get -t -v ./...
+  - go get -t -v ./...
 
 script:
-#- diff -u <(echo -n) <(gofmt -d .)
-- go vet $(go list ./... | grep -v /vendor/)
-- go test -v -race ./...
-- gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
+  - go vet $(go list ./... | grep -v /vendor/)
+  - go test -v -race ./...
+  - gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
 
 deploy:
   provider: releases
   api_key:
-    secure: fMxJ2FYYkg8woEYtqFyoDyjh8OgOsyQL5/y2Wwt/4MBfLBgcItySM2SvAivPgrGxB+8umNiUyMrMRvXFUv4f/C9KzFXR2uAvF0Tibub6zc2FaAifBo95qFDDy56EA1ogTNTVpkTca1oi2Qsd9Tbsyzmu/YiqsMk/8Dx6ZAUFeW0jSPph3sCXiijODHvDDMNYcUxc0PoZ0xG6zwLR5RYk/Cj1XNwR+t66qKjX0pmvy97RWbfLvEkRjX6963EQBKzFXNEyvxmt5roXYZNPCHORROM7tb1jAM+kTnaXjHTJVTz+Y+nwDZgEnp5gn+GdkG3BCpBCzwwDp5rinhIEGCW6/KzMUpSCCnCBSlwWhlaWMgwD0+LYtKRwr1z/Ay5QeccdgSX0EPEUA3IfdfUBhy5AXv8joUNXWn0EnscZOG5rqfM/EkjwGNxul75U6+PEVu90XYtKjDh+zan+W0rhY85v+4JuaDxGj2u1fzf6sfc45UUSdx2mAUzEnSz+o7cNF85Ue9oOev3S41T/FhMzCt524hDLiig0T3REGU79l9YydhT+1ZMyBYr6iVpMJKrsNXvgZVO2LtmewiGBb5kwjI8XaqC92OUhzYam1zdvn8alQ9Gg7eBLa8IsCJ8uQAlE/xM/zw3zZoNxxfENBrQGxbk7/wI6K0IH5T7ysi/Y4xDYyXE=
-  file: 'doo.darwin.amd64'
+    secure: c6OTcQ6ej+osUwuQlFBaioM+LA2nJgkCrF1elKX8FlRgFgq0wKPEDoSprUXw7Oefx017Z0UYH9Wc2ZbojvNZWCfDDV/6Jw3BTytUJ/QN/0rmXTD44o4UypPXWYmP3Y7xILhuJ7+OnBIgUJM+vbHiC+aQbKipVJ+K0FiJ4phV7VEfjkWm7CFtJqAYvMpikqC5KLUAxNupjdFlAjdIKEhyQdRHLqH1Cn8musZ8o/XEtFQvg/lUfLUrsAlaHj0hev6JDshxFRW1+N4yuU/o4bi7SsSiPVqE7rkGvcEsZCryODod3MCE/ROSeW4yUl7KOfz6mpov68tma0t+Dm6PzRT8vsXnZtswWI2DbvEg6bTxvFKFQ1/YHB0Kfhif2JaIcaGAd1RgtWEJ+71z3+CHvj39tio1YTqpaW0duDt68DgTfv79n137cjP/xxZG/8ueuHssuhYAGRZm8dAJ7Bu9dItxxUBqFY2+N97vNYGYAFBRt0ODleykofzrL0FHOnN9UCboKV3D6fQMwQLbTw0yC2Z5GtBkY1nM88LXB5/dGzuk+QfooHbXR5DRaPK3+HCbDGf4yFSftPz7HPt8QcBugy8Oo71rodvPNLvMr61HASyiBxgGOLc7caIhLTShvXow66WsbeVkVJ0RbHbCCfX5cWVu1iLPlT04N7/qDjttLpj7OQg=
+  file: doo.darwin.amd64
   skip_cleanup: true
   on:
     repo: gekalogiros/Doo
