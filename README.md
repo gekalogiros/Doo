@@ -24,12 +24,14 @@ There are plenty of amazing and rich featured task management apps out there. Al
 
 ## Usage
 
-- Add Task
+- Adding a Task
 ```
-$ doo add -d "I am a todo task" -dd 10d
+$ doo add -d "I am a todo task. Due date is in 10 days" -dd 10d
+$ doo add -d "I am a todo task. Due date is tomorrow" -dd 1
+$ doo add "I am a todo task added in today's task list"
 ```
 
-- Remove Tasks for a certain date
+- Removing Tasks for a certain date
 ```
 $ doo rm -dt 17-09-2018 -f
 ```
