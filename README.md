@@ -18,18 +18,18 @@ Doo aims to be a good companion to developers and system administrators or just 
 
 Doo aims to be an effective tool that stores the points you'd like to discuss in your daily stand-ups, light tasks that you have to complete or phone calls that you need to make. It actually uses the filesystem to do it. It is as easy as it gets.
 
-Doo has not been designed to be dead simple. It is supposed to be something quick and dirty for tracking tasks of minor importance. 
+Doo has been designed to be dead simple. It is supposed to be something quick and dirty for tracking tasks of minor importance. 
 
 There are plenty of amazing and rich featured task management apps out there. All of them are definitely better than Doo. However, if your lack of discipline prevented you from making them an integral part of your daily routine, give Doo a go.
 
 ## Usage
 
-- Add Note
+- Add Task
 ```
 $ doo add -d "I am a todo task" -dd 10d
 ```
 
-- Remove Notes for a certain date
+- Remove Tasks for a certain date
 ```
 $ doo rm -dt 17-09-2018 -f
 ```
