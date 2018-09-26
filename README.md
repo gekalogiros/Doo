@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/gekalogiros/Doo.svg?branch=master)](https://travis-ci.com/gekalogiros/Doo)
-
+ 
 # Doo
 
 Doo aims to be a dead simple and super quick cli tool to manage non-sophisticated task lists on your OSX machine
