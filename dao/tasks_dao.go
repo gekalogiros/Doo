@@ -9,13 +9,14 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 	"time"
 )
 
 type TaskDao interface {
 	Save(n *model.Task)
 	RemoveAll(date time.Time)
-	RetrieveAllByDate(date time.Time) []string
+	RetrieveAllByDate(date time.Time) []model.Task
 }
 
 type filesystem struct {
@@ -79,20 +80,30 @@ func (f filesystem) RemoveAll(date time.Time) {
 	// TODO
 }
 
-func (f filesystem) RetrieveAllByDate(date time.Time) []string {
+func (f filesystem) RetrieveAllByDate(date time.Time) []model.Task {
+
 	taskListPath := path.Join(f.configDir, date.Format(f.fileFormat))
 	if f.configDirectoryExists() && f.directoryExists(taskListPath) {
-		if tasks, err := readLines(taskListPath); err == nil {
+
+		if lines, err := readLines(taskListPath); err == nil {
+			tasks := make([]model.Task, len(lines))
+
+			for i, element := range lines {
+				lineSplit := strings.Split(element, ",")
+				task := model.Task{Id: lineSplit[0], Description: lineSplit[1], Date: date}
+				tasks[i] = task
+			}
+
 			return tasks
 		}
 	}
-	return []string{}
+	return []model.Task{}
 }
 
 func readLines(path string) (lines []string, err error) {
 	var (
-		file *os.File
-		part []byte
+		file   *os.File
+		part   []byte
 		prefix bool
 	)
 	if file, err = os.Open(path); err != nil {

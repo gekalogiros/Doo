@@ -24,14 +24,13 @@ func (lr taskListRetrieval) Execute() error {
 		tasks := tasksDao.RetrieveAllByDate(retrievalDate)
 
 		if len(tasks) == 0 {
-
 			fmt.Printf("%s %s",
 				formatter.Red("Cannot find task list for date provided: "),
 				formatter.BRed(retrievalDate.Format("02-01-2006"), formatter.Boldest))
 
 		} else {
 			for _, task := range tasks {
-				fmt.Println(task)
+				fmt.Printf("%s\t%s\n", task.Id, task.Description)
 			}
 		}
 
