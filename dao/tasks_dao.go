@@ -86,8 +86,8 @@ func (f filesystem) RetrieveAllByDate(date time.Time) []model.Task {
 	if f.configDirectoryExists() && f.directoryExists(taskListPath) {
 
 		if lines, err := readLines(taskListPath); err == nil {
-			tasks := make([]model.Task, len(lines))
 
+			tasks := make([]model.Task, len(lines))
 			for i, element := range lines {
 				lineSplit := strings.Split(element, ",")
 				task := model.Task{Id: lineSplit[0], Description: lineSplit[1], Date: date}
