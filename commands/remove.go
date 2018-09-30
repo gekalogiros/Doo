@@ -21,7 +21,7 @@ func (r taskListRemoval) Execute() error {
 
 	} else {
 
-		tasksDao.RemoveAll(date)
+		tasksDao.RemoveByDate(date)
 
 		return nil
 	}

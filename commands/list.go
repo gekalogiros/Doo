@@ -21,7 +21,7 @@ func (lr taskListRetrieval) Execute() error {
 
 	} else {
 
-		tasks := tasksDao.RetrieveAllByDate(retrievalDate)
+		tasks := tasksDao.RetrieveByDate(retrievalDate)
 
 		if len(tasks) == 0 {
 			fmt.Printf("%s %s",
