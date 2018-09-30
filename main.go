@@ -54,14 +54,14 @@ func (l ListCommandOptions) valid() bool {
 func main() {
 
 	addCommand := flag.NewFlagSet(AddSubCommand, flag.ExitOnError)
-	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "task description (Required)")
+	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "task description")
 	todoDatePointer := addCommand.String(AddDueDateOption, "today", "task due date")
 
 	removeCommand := flag.NewFlagSet(RemoveSubCommand, flag.ExitOnError)
-	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete (Required)")
+	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete")
 
 	listCommand := flag.NewFlagSet(ListSubCommnad, flag.ExitOnError)
-	listDatePointer := listCommand.String(ListDateOption, "today", "Date of the task list you'd like to see information for (Required)")
+	listDatePointer := listCommand.String(ListDateOption, "today", "Date of the task list you'd like to see information for")
 
 	if len(os.Args) < 2 {
 		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s, %s", AddSubCommand, ListSubCommnad, RemoveSubCommand))
