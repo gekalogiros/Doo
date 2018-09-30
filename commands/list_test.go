@@ -19,6 +19,6 @@ func TestNewTaskListRetrieval_withInvalidDate(t *testing.T) {
 func ExampleNewTaskListRetrieval() {
 	NewTaskListRetrieval("24-06-2018").Execute()
 	// Output:
-	// first-task
-	// second-task
+	// 1111	first-task
+	// 2222	second-task
 }

@@ -23,13 +23,10 @@ var (
 		"02-01-2006", "2-1-2006", "02-01-06", "2-1-06",
 	}
 
-	futureDayLookupIncludingToday = map[string]string{
+	dayLookup = map[string]string{
+		"yesterday": "-1",
 		"today":    "0",
 		"tomorrow": "1",
-	}
-	pastDayLookupIncludingToday = map[string]string{
-		"yesterday": "-1",
-		"today":     "0",
 	}
 
 	identity temporalFunc = func(period int) int {
@@ -43,7 +40,7 @@ var (
 func ResolveDueDate(dueDate string) (time.Time, error) {
 	switch {
 	case futureDayRegex.MatchString(dueDate):
-		return resolveByPeriod(futureDayLookupIncludingToday[dueDate], identity)
+		return resolveByPeriod(dayLookup[dueDate], identity)
 	case futureTemporalRegex.MatchString(dueDate):
 		return resolveByTemporal(dueDate, identity)
 	case futurePeriodRegex.MatchString(dueDate):
@@ -55,14 +52,12 @@ func ResolveDueDate(dueDate string) (time.Time, error) {
 
 func ResolveDate(date string) (time.Time, error) {
 	switch {
-	case futureDayRegex.MatchString(date):
-		return resolveByPeriod(futureDayLookupIncludingToday[date], identity)
+	case futureDayRegex.MatchString(date) || pastDayRegex.MatchString(date):
+		return resolveByPeriod(dayLookup[date], identity)
 	case futureTemporalRegex.MatchString(date):
 		return resolveByTemporal(date, identity)
 	case futurePeriodRegex.MatchString(date):
 		return resolveByPeriod(date, identity)
-	case pastDayRegex.MatchString(date):
-		return resolveByPeriod(pastDayLookupIncludingToday[date], identity)
 	case pastTemporalRegex.MatchString(date):
 		return resolveByTemporal(date, inverse)
 	case pastPeriodRegex.MatchString(date):

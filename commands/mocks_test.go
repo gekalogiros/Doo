@@ -6,14 +6,17 @@ import (
 	"time"
 )
 
-type tasksDaoMock struct {}
+type tasksDaoMock struct{}
 
-func (d tasksDaoMock) Save(task *model.Task){}
+func (d tasksDaoMock) Save(task *model.Task) {}
 
-func (d tasksDaoMock) RemoveAll(date time.Time){}
+func (d tasksDaoMock) RemoveAll(date time.Time) {}
 
-func (d tasksDaoMock) RetrieveAllByDate(date time.Time) []string {
-	return []string{ "first-task", "second-task" }
+func (d tasksDaoMock) RetrieveAllByDate(date time.Time) []model.Task {
+	return []model.Task{
+		{Id: "1111", Description: "first-task"},
+		{Id: "2222", Description: "second-task"},
+	}
 }
 
 func newTasksDaoMock() dao.TaskDao {
