@@ -82,10 +82,7 @@ func (f filesystem) RemoveAll(date time.Time) {
 func (f filesystem) RetrieveAllByDate(date time.Time) []string {
 	taskListPath := path.Join(f.configDir, date.Format(f.fileFormat))
 	if f.configDirectoryExists() && f.directoryExists(taskListPath) {
-		tasks, err := readLines(taskListPath)
-		if err != nil {
-			log.Fatal("Failed to retrieve task list")
-		} else {
+		if tasks, err := readLines(taskListPath); err == nil {
 			return tasks
 		}
 	}

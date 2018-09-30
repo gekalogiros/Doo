@@ -2,7 +2,7 @@ package commands
 
 import (
 	"fmt"
-	"time"
+	"github.com/gekalogiros/Doo/formatter"
 )
 
 type taskListRetrieval struct {
@@ -15,16 +15,24 @@ func NewTaskListRetrieval(date string) Command {
 
 func (lr taskListRetrieval) Execute() error {
 
-	if date, err := time.Parse("02-01-2006", lr.date); err != nil {
+	if retrievalDate, err := ResolveDate(lr.date); err != nil {
 
 		return fmt.Errorf("invalid retrieval date provided: %s", lr.date)
 
 	} else {
 
-		tasks := tasksDao.RetrieveAllByDate(date)
+		tasks := tasksDao.RetrieveAllByDate(retrievalDate)
 
-		for _, task := range tasks {
-			fmt.Println(task)
+		if len(tasks) == 0 {
+
+			fmt.Printf("%s %s",
+				formatter.Red("Cannot find task list for date provided: "),
+				formatter.BRed(retrievalDate.Format("02-01-2006"), formatter.Boldest))
+
+		} else {
+			for _, task := range tasks {
+				fmt.Println(task)
+			}
 		}
 
 		return nil

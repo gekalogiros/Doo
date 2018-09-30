@@ -6,7 +6,6 @@ import (
 	"github.com/gekalogiros/Doo/commands"
 	"log"
 	"os"
-	"time"
 )
 
 const (
@@ -49,28 +48,20 @@ type ListCommandOptions struct {
 }
 
 func (l ListCommandOptions) valid() bool {
-	if *l.date == "" {
-		return false
-	}
-
-	if _, err := time.Parse("02-01-2006", *l.date); err != nil {
-		return false
-	}
-
-	return true
+	return *l.date != ""
 }
 
 func main() {
 
 	addCommand := flag.NewFlagSet(AddSubCommand, flag.ExitOnError)
 	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "task description (Required)")
-	todoDatePointer := addCommand.String(AddDueDateOption, "0d", "task due date")
+	todoDatePointer := addCommand.String(AddDueDateOption, "today", "task due date")
 
 	removeCommand := flag.NewFlagSet(RemoveSubCommand, flag.ExitOnError)
 	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete (Required)")
 
 	listCommand := flag.NewFlagSet(ListSubCommnad, flag.ExitOnError)
-	listDatePointer := listCommand.String(ListDateOption, "", "Date of the task list you'd like to see information for (Required)")
+	listDatePointer := listCommand.String(ListDateOption, "today", "Date of the task list you'd like to see information for (Required)")
 
 	if len(os.Args) < 2 {
 		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s, %s", AddSubCommand, ListSubCommnad, RemoveSubCommand))

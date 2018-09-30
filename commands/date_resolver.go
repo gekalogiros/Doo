@@ -8,26 +8,71 @@ import (
 	"time"
 )
 
+type temporalFunc func(int) int
+
 var (
-	timeUnitRegex      = regexp.MustCompile("^[0-9]+(d|m|y|D|M|Y)$")
-	periodRegex        = regexp.MustCompile("^[0-9]+$")
+	futureDayRegex      = regexp.MustCompile("^today|tomorrow$")
+	futureTemporalRegex = regexp.MustCompile("^[0-9]+(d|m|D|M)$")
+	futurePeriodRegex   = regexp.MustCompile("^[0-9]+$")
+	pastDayRegex        = regexp.MustCompile("^yesterday$")
+	pastTemporalRegex   = regexp.MustCompile("^-[0-9]+(d|m|D|M)$")
+	pastPeriodRegex     = regexp.MustCompile("^-[0-9]+$")
+
 	allowedDateFormats = [...]string{
 		"02/01/2006", "2/1/2006", "02/01/06", "2/1/06",
-		"02-01-2006", "2-1-2006", "02-01-06", "2-1-06"}
+		"02-01-2006", "2-1-2006", "02-01-06", "2-1-06",
+	}
+
+	futureDayLookupIncludingToday = map[string]string{
+		"today":    "0",
+		"tomorrow": "1",
+	}
+	pastDayLookupIncludingToday = map[string]string{
+		"yesterday": "-1",
+		"today":     "0",
+	}
+
+	identity temporalFunc = func(period int) int {
+		return period
+	}
+	inverse temporalFunc = func(period int) int {
+		return -period
+	}
 )
 
 func ResolveDueDate(dueDate string) (time.Time, error) {
 	switch {
-	case timeUnitRegex.MatchString(dueDate):
-		return resolveByExpression(dueDate)
-	case periodRegex.MatchString(dueDate):
-		return resolveByNumber(dueDate)
+	case futureDayRegex.MatchString(dueDate):
+		return resolveByPeriod(futureDayLookupIncludingToday[dueDate], identity)
+	case futureTemporalRegex.MatchString(dueDate):
+		return resolveByTemporal(dueDate, identity)
+	case futurePeriodRegex.MatchString(dueDate):
+		return resolveByPeriod(dueDate, identity)
 	default:
 		return resolveByDate(dueDate)
 	}
 }
 
-func resolveByExpression(expression string) (time.Time, error) {
+func ResolveDate(date string) (time.Time, error) {
+	switch {
+	case futureDayRegex.MatchString(date):
+		return resolveByPeriod(futureDayLookupIncludingToday[date], identity)
+	case futureTemporalRegex.MatchString(date):
+		return resolveByTemporal(date, identity)
+	case futurePeriodRegex.MatchString(date):
+		return resolveByPeriod(date, identity)
+	case pastDayRegex.MatchString(date):
+		return resolveByPeriod(pastDayLookupIncludingToday[date], identity)
+	case pastTemporalRegex.MatchString(date):
+		return resolveByTemporal(date, inverse)
+	case pastPeriodRegex.MatchString(date):
+		return resolveByPeriod(date, inverse)
+	default:
+		return resolveByDate(date)
+	}
+}
+
+func resolveByTemporal(expression string, temporalFunc temporalFunc) (time.Time, error) {
 
 	today := time.Now()
 
@@ -40,14 +85,25 @@ func resolveByExpression(expression string) (time.Time, error) {
 
 	switch periodType {
 	case "d":
-		return today.AddDate(0, 0, period), nil
+		return today.AddDate(0, 0, temporalFunc(period)), nil
 	case "m":
-		return today.AddDate(0, period, 0), nil
-	case "y":
-		return today.AddDate(period, 0, 0), nil
+		return today.AddDate(0, temporalFunc(period), 0), nil
 	default:
 		return today, fmt.Errorf("failed to resolve expression: %s", expression)
 	}
+}
+
+func resolveByPeriod(numberOfDays string, temporalFunc temporalFunc) (time.Time, error) {
+
+	today := time.Now()
+
+	numberOfDaysAsInt, err := toInt(numberOfDays)
+
+	if err != nil {
+		return today, fmt.Errorf("failed to parse number of days, period provided is probably too long: %s", numberOfDays)
+	}
+
+	return today.AddDate(0, 0, temporalFunc(numberOfDaysAsInt)), nil
 }
 
 func resolveByDate(date string) (time.Time, error) {
@@ -59,19 +115,6 @@ func resolveByDate(date string) (time.Time, error) {
 	}
 
 	return time.Now(), fmt.Errorf("failed to parse date: %s", date)
-}
-
-func resolveByNumber(numberOfDays string) (time.Time, error) {
-
-	today := time.Now()
-
-	numberOfDaysAsInt, error := toInt(numberOfDays)
-
-	if error != nil {
-		return today, fmt.Errorf("failed to parse number of days, period provided is probably too long: %s", numberOfDays)
-	}
-
-	return today.AddDate(0, 0, numberOfDaysAsInt), nil
 }
 
 func toInt(time string) (int, error) {

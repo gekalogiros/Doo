@@ -19,8 +19,6 @@ func TestNewTaskCreation(t *testing.T) {
 		fields  fields
 		wantErr bool
 	}{
-		{"expression - years", fields{ date: "1y"}, false},
-		{"expression - years - case insensitive", fields{ date: "1Y"}, false},
 		{"expression - months", fields{ date: "1m"}, false},
 		{"expression - months - case insensitive", fields{ date: "1M"}, false},
 		{"expression - days", fields{ date: "1d"}, false},

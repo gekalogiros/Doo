@@ -15,13 +15,16 @@ This project is under development
 - Adding a Task
 ```
 $ doo add -d "I am a todo task. Due date is in 10 days" -dd 10d
+$ doo add -d "I am a todo task. Due date is in 1 month" -dd 1m
 $ doo add -d "I am a todo task. Due date is tomorrow" -dd 1
 $ doo add "I am a todo task added in today's task list"
 ```
 
-- Removing Tasks for a certain date
+- Lookup Task List
 ```
-$ doo rm -dt 17-09-2018 -f
+$ doo ls
+$ doo ls -dt today
+$ doo ls -dt 1m
 ```
 
 ## Due Date Formats Allowed (--dd flag)
@@ -29,8 +32,6 @@ $ doo rm -dt 17-09-2018 -f
 Assuming today is 2nd of January 2018 and you want to add a todo app 1 year from now, you have the following options when defining the `-dd` (due date) flag:
 
 ```
-1y
-1Y
 12m
 12M
 365d
