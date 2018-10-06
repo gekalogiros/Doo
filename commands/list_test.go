@@ -6,10 +6,6 @@ import (
 	"testing"
 )
 
-func init() {
-	tasksDao = newTasksDaoMock()
-}
-
 func TestNewTaskListRetrieval_withInvalidDate(t *testing.T) {
 	invalidDate := "sfdgsdg"
 	err := NewTaskListRetrieval(invalidDate).Execute()
@@ -17,6 +13,7 @@ func TestNewTaskListRetrieval_withInvalidDate(t *testing.T) {
 }
 
 func ExampleNewTaskListRetrieval() {
+	tasksDao = newTasksDaoMock()
 	NewTaskListRetrieval("24-06-2018").Execute()
 	// Output:
 	// 1111	first-task
