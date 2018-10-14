@@ -5,10 +5,11 @@
 package mock_dao
 
 import (
-	model "github.com/gekalogiros/Doo/model"
-	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 	time "time"
+
+	model "github.com/gekalogiros/Doo/model"
+	gomock "github.com/golang/mock/gomock"
 )
 
 // MockTaskDao is a mock of TaskDao interface
@@ -64,4 +65,14 @@ func (m *MockTaskDao) RetrieveByDate(date time.Time) []model.Task {
 // RetrieveByDate indicates an expected call of RetrieveByDate
 func (mr *MockTaskDaoMockRecorder) RetrieveByDate(date interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RetrieveByDate", reflect.TypeOf((*MockTaskDao)(nil).RetrieveByDate), date)
+}
+
+// RemovePast mocks base method
+func (m *MockTaskDao) RemovePast() {
+	m.ctrl.Call(m, "RemovePast")
+}
+
+// RemovePast indicates an expected call of RemovePast
+func (mr *MockTaskDaoMockRecorder) RemovePast() *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemovePast", reflect.TypeOf((*MockTaskDao)(nil).RemovePast))
 }

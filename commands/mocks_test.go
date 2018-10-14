@@ -1,9 +1,10 @@
 package commands
 
 import (
+	"time"
+
 	"github.com/gekalogiros/Doo/dao"
 	"github.com/gekalogiros/Doo/model"
-	"time"
 )
 
 type tasksDaoMock struct{}
@@ -18,6 +19,8 @@ func (d tasksDaoMock) RetrieveByDate(date time.Time) []model.Task {
 		{Id: "2222", Description: "second-task"},
 	}
 }
+
+func (d tasksDaoMock) RemovePast() {}
 
 func newTasksDaoMock() dao.TaskDao {
 	return tasksDaoMock{}

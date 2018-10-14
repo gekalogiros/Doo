@@ -5,7 +5,8 @@ import (
 )
 
 type taskListRemoval struct {
-	date string
+	date    string
+	allPast bool
 }
 
 func NewTaskListRemoval(date string) Command {
@@ -14,9 +15,27 @@ func NewTaskListRemoval(date string) Command {
 
 func (r taskListRemoval) Execute() error {
 
-	if removalDate, err := ResolveDate(r.date); err != nil {
+	if r.allPast {
 
-		return fmt.Errorf("invalid removal date provided: %s", r.date)
+		return removePast()
+
+	}
+
+	return removeDate(r.date)
+}
+
+func removePast() error {
+
+	tasksDao.RemovePast()
+
+	return nil
+}
+
+func removeDate(date string) error {
+
+	if removalDate, err := ResolveDate(date); err != nil {
+
+		return fmt.Errorf("invalid removal date provided: %s", date)
 
 	} else {
 

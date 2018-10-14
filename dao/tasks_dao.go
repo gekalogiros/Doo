@@ -4,19 +4,22 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"github.com/gekalogiros/Doo/model"
 	"io"
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/gekalogiros/Doo/model"
 )
 
 type TaskDao interface {
 	Save(n *model.Task)
 	RemoveByDate(date time.Time)
 	RetrieveByDate(date time.Time) []model.Task
+	RemovePast()
 }
 
 type filesystem struct {
@@ -79,6 +82,40 @@ func (f filesystem) Save(n *model.Task) {
 func (f filesystem) RemoveByDate(date time.Time) {
 	taskListPath := path.Join(f.configDir, date.Format(f.fileFormat))
 	os.RemoveAll(taskListPath)
+}
+
+func (f filesystem) RemovePast() {
+
+	if files, err := filepath.Glob(f.configDir + "/*"); err != nil {
+
+		log.Fatal(err)
+
+	} else {
+
+		for _, element := range files {
+
+			base := filepath.Base(element)
+
+			fmt.Println("I'm in " + base)
+
+			if taskListDate, e := time.Parse(f.fileFormat, base); e != nil {
+
+				log.Fatal(e)
+
+			} else {
+
+				now := time.Now().Truncate(24 * time.Hour)
+
+				location, _ := time.LoadLocation("Local")
+
+				taskListDate = taskListDate.In(location)
+
+				if taskListDate.Before(now) {
+					os.RemoveAll(element)
+				}
+			}
+		}
+	}
 }
 
 func (f filesystem) RetrieveByDate(date time.Time) []model.Task {
