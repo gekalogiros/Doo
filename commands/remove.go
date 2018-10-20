@@ -9,8 +9,8 @@ type taskListRemoval struct {
 	allPast bool
 }
 
-func NewTaskListRemoval(date string) Command {
-	return taskListRemoval{date: date}
+func NewTaskListRemoval(date string, allPast bool) Command {
+	return taskListRemoval{date: date, allPast: allPast}
 }
 
 func (r taskListRemoval) Execute() error {

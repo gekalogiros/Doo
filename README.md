@@ -27,6 +27,15 @@ $ doo ls -dt today
 $ doo ls -dt 1m
 ```
 
+- Remove Task List
+```
+$ doo rm -dt 0
+$ doo rm -dt today
+$ doo rm -dt -1
+$ doo rm -dt -1m
+$ doo rm -past
+```
+
 ## Due Date Formats Allowed (--dd flag)
 
 Assuming today is 2nd of January 2018 and you want to add a todo app 1 year from now, you have the following options when defining the `-dd` (due date) flag:

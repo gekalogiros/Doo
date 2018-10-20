@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/gekalogiros/Doo/commands"
 	"log"
 	"os"
+
+	"github.com/gekalogiros/Doo/commands"
 )
 
 const (
@@ -17,6 +18,7 @@ const (
 
 	RemoveSubCommand = "rm"
 	RemoveDateOption = "dt"
+	RemovePastOption = "past"
 
 	ListSubCommnad = "ls"
 	ListDateOption = "dt"
@@ -36,11 +38,12 @@ func (o AddCommandOptions) valid() bool {
 }
 
 type RemoveCommandOptions struct {
-	date *string
+	date    *string
+	allPast *bool
 }
 
 func (o RemoveCommandOptions) valid() bool {
-	return *o.date != ""
+	return (*o.date != "" && *o.allPast != true) || (*o.date == "" && *o.allPast == true)
 }
 
 type ListCommandOptions struct {
@@ -59,6 +62,7 @@ func main() {
 
 	removeCommand := flag.NewFlagSet(RemoveSubCommand, flag.ExitOnError)
 	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete")
+	removePastPointer := removeCommand.Bool(RemovePastOption, false, "Remove all past task lists")
 
 	listCommand := flag.NewFlagSet(ListSubCommnad, flag.ExitOnError)
 	listDatePointer := listCommand.String(ListDateOption, "today", "Date of the task list you'd like to see information for")
@@ -98,9 +102,9 @@ func main() {
 
 	if removeCommand.Parsed() {
 
-		options := RemoveCommandOptions{date: removeDatePointer}
+		options := RemoveCommandOptions{date: removeDatePointer, allPast: removePastPointer}
 
-		checkArgumentsAndExecute(*removeCommand, options, commands.NewTaskListRemoval(*options.date))
+		checkArgumentsAndExecute(*removeCommand, options, commands.NewTaskListRemoval(*options.date, *options.allPast))
 	}
 
 	if listCommand.Parsed() {
