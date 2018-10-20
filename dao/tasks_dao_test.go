@@ -3,6 +3,7 @@ package dao
 import (
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"path"
 	"testing"
@@ -18,7 +19,7 @@ const (
 
 var location, _ = time.LoadLocation("Local")
 var now = time.Now().In(location)
-var configDir = fmt.Sprintf("%s%d", os.TempDir(), now.UnixNano()/int64(time.Millisecond))
+var configDir = fmt.Sprintf("%stest-%d", os.TempDir(), rand.Int())
 var task = model.Task{Id: "xxx0", Description: "I am a test task", Date: now}
 var oneYearInThePastDate = now.AddDate(-1, 0, 0)
 var pastTask = model.Task{Id: "xxx1", Description: "I am a test past task", Date: oneYearInThePastDate}
