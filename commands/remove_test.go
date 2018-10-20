@@ -1,10 +1,11 @@
 package commands
 
 import (
-	"github.com/gekalogiros/Doo/mocks"
-	"github.com/golang/mock/gomock"
 	"reflect"
 	"testing"
+
+	"github.com/gekalogiros/Doo/mocks"
+	"github.com/golang/mock/gomock"
 )
 
 func TestNewTaskListRemoval(t *testing.T) {

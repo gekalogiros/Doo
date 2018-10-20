@@ -2,8 +2,16 @@ package commands
 
 import (
 	"fmt"
+
 	"github.com/gekalogiros/Doo/formatter"
+	"github.com/gekalogiros/Doo/model"
 )
+
+var printTasks = func(tasks []model.Task) {
+	for _, task := range tasks {
+		fmt.Printf("%s\t%s\n", task.Id, task.Description)
+	}
+}
 
 type taskListRetrieval struct {
 	date string
@@ -29,9 +37,7 @@ func (lr taskListRetrieval) Execute() error {
 				formatter.BRed(retrievalDate.Format("02-01-2006"), formatter.Boldest))
 
 		} else {
-			for _, task := range tasks {
-				fmt.Printf("%s\t%s\n", task.Id, task.Description)
-			}
+			printTasks(tasks)
 		}
 
 		return nil

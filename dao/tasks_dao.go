@@ -96,8 +96,6 @@ func (f filesystem) RemovePast() {
 
 			base := filepath.Base(element)
 
-			fmt.Println("I'm in " + base)
-
 			if taskListDate, e := time.Parse(f.fileFormat, base); e != nil {
 
 				log.Fatal(e)

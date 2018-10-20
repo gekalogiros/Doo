@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+
 	"github.com/gekalogiros/Doo/model"
 )
 
@@ -22,9 +23,9 @@ func (c taskCreation) Execute() error {
 
 	} else {
 
-		note := model.NewTask(c.description, date)
+		task := model.NewTask(c.description, date)
 
-		tasksDao.Save(&note)
+		tasksDao.Save(&task)
 
 		return nil
 	}
