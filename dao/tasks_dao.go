@@ -43,7 +43,7 @@ func (f filesystem) ensureConfigDirectoryIsPresent() {
 	if !f.configDirectoryExists() {
 		err := os.MkdirAll(f.configDir, 0755)
 		if err != nil {
-			log.Fatal("Cannot create or access config directory", err)
+			log.Fatal("Cannot create or access config directory. ", err)
 		}
 	}
 }
