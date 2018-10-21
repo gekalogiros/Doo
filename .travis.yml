@@ -42,4 +42,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: gekalogiros/Doo
-    tags: true
+    # tags: true
