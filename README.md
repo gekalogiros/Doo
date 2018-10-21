@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/gekalogiros/Doo.svg?branch=master)](https://travis-ci.com/gekalogiros/Doo)
+[![Release Number](https://img.shields.io/github/release/gekalogiros/Doo.svg)](https://travis-ci.com/gekalogiros/Doo)
  
 # Doo
 
