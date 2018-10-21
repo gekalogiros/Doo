@@ -4,7 +4,7 @@ go:
 
 branches:
   except:
-    - /^build-[0-9a-z\-]*/
+    - /^*-v[0-9a-z\-]*/
 
 env:
 - VERSION="v0.0.${TRAVIS_BUILD_NUMBER}"
