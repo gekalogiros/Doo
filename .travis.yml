@@ -1,6 +1,6 @@
 stages:
   - name: deploy
-    if: tag IS NOT blank
+    if: tag IS blank
 
 language: go
 go:
@@ -37,4 +37,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: gekalogiros/Doo
-    # tags: true
+    tags: true
