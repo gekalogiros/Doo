@@ -20,8 +20,12 @@ const (
 	RemoveDateOption = "dt"
 	RemovePastOption = "past"
 
-	ListSubCommnad = "ls"
+	ListSubCommand = "ls"
 	ListDateOption = "dt"
+)
+
+var (
+	version = "unspecified"
 )
 
 type Options interface {
@@ -64,11 +68,11 @@ func main() {
 	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete")
 	removePastPointer := removeCommand.Bool(RemovePastOption, false, "Remove all past task lists")
 
-	listCommand := flag.NewFlagSet(ListSubCommnad, flag.ExitOnError)
+	listCommand := flag.NewFlagSet(ListSubCommand, flag.ExitOnError)
 	listDatePointer := listCommand.String(ListDateOption, "today", "Date of the task list you'd like to see information for")
 
 	if len(os.Args) < 2 {
-		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s, %s", AddSubCommand, ListSubCommnad, RemoveSubCommand))
+		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s, %s", AddSubCommand, ListSubCommand, RemoveSubCommand))
 		os.Exit(1)
 	}
 
@@ -79,9 +83,11 @@ func main() {
 	case RemoveSubCommand:
 		removeCommand.Parse(os.Args[2:])
 		break
-	case ListSubCommnad:
+	case ListSubCommand:
 		listCommand.Parse(os.Args[2:])
 		break
+	case "--version":
+		fmt.Println("Doo version " + version)
 	default:
 		flag.PrintDefaults()
 		os.Exit(1)

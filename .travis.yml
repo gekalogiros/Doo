@@ -2,6 +2,9 @@ language: go
 go:
 - '1.11'
 
+env:
+  - VERSION="v0.0.${TRAVIS_BUILD_NUMBER}"
+
 before_install:
   - go get github.com/mitchellh/gox
 
@@ -11,7 +14,12 @@ install:
 script:
   - go vet $(go list ./... | grep -v /vendor/)
   - go test -v -race ./...
-  - gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...
+  - gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.version=${VERSION}" -verbose ./...
+
+defore_deploy:
+  - git config --local user.name "gekalogiros"
+  - git config --local user.email "foo@foo.com"
+  - git tag "${VERSION}"
 
 deploy:
   provider: releases
