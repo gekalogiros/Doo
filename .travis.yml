@@ -22,12 +22,17 @@ script:
 - go test -v -race ./...
 - gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.version=${VERSION}" -verbose ./...
 
-after_success:
-- echo "$VERSION"  
-- git config --global user.email "builds@travis-ci.com"
-- git config --global user.name "Travis CI"
-- git tag -a "${VERSION}" -m "${VERSION}"
-- git push https://$GITHUBKEY@github.com/gekalogiros/Doo --tags
+# after_success:
+# - echo "$VERSION"  
+# - git config --global user.email "builds@travis-ci.com"
+# - git config --global user.name "Travis CI"
+# - git tag -a "${VERSION}" -m "${VERSION}"
+# - git push https://$GITHUBKEY@github.com/gekalogiros/Doo --tags
+
+before_deploy:
+      - git config --global user.email "builds@travis-ci.com"
+      - git config --global user.name "Travis CI"
+      - git tag -a "${VERSION}" -m "${VERSION}"
 
 deploy:
   provider: releases
