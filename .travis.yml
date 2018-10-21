@@ -22,10 +22,11 @@ script:
 - gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.version=${VERSION}" -verbose ./...
 
 after_success:
+- echo "Version: ${VERSION}"  
 - git config --global user.email "builds@travis-ci.com"
 - git config --global user.name "Travis CI"
-- git tag -a $VERSION -m "Generated Tag $VERSION"
-- git push -q https://$GITHUBKEY@github.com/gekalogiros/Doo --tags
+- git tag -a "${VERSION}" -m "Generated Tag ${VERSION}"
+- git push https://$GITHUBKEY@github.com/gekalogiros/Doo --tags
 
 deploy:
   provider: releases
