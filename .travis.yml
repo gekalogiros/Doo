@@ -1,21 +1,27 @@
 language: go
 go:
 - '1.11'
+
 env:
-  secure: IhtngPvC7yyPQF4AnhMnF3nbPEbNMObH2ysSRsKvMdX//HjW8sCcjKJsZ3tsV486xlWkJzRK0LdR5rZKhZAq8yZE1Fj1EsYUMpllK5wzgIRCfAqJGBULeaL2Zo2VHm+rPQC2mHkwpWoM4g4yMJbJrR/Xzh0i2SYj1z3ip5KMjGV4s3wFoBTloKCtFaCW0T1LwTRedkak9OTnAv154gEqkqcO18HQmitsGZ8OGhNPalSuAT5NXhk0RosDCtLnuDvlmQx98FKn+FPhU0YGwlxLgpiFRvsFIhceMx3IMX+Z6CTJL0HX/q39iDJ4wfR4wPWfvfF4+utjbrQuuuPZ1VGVaST3FNGFjF72IVduqk3mtzcYhgGuwMypH01YMHjPQtewRmi0g7mL7gyyzTy+lxtQy4LJojWoyqQLPkJjuLhDnnc/quqYxHJiGGqrkBPV60tW+sAR5HacrgAHW8b4nZlIpj8Lqo7L8SEJVvQN77ZC7ot/G0g1YbTTU1eTYQl+J2g3sn9bG/blyxSO4PLNckiYPXUggrseUDuKSEBQrNSpzol5RLJhHmvvVlzvPbZ5j9N+BEG6Y8WxSLofPKHZHPQuo8bGn7fmZxpyDH1pya5z502KMjN97NwfWmQ0asqReVm1pbyGG9noqyXJZnGhUaGtF4iL6y4egc3FvtFwB8LFDsk=
+- VERSION="v0.0.${TRAVIS_BUILD_NUMBER}"
+
 before_install:
 - go get github.com/mitchellh/gox
+
 install:
 - go get -t -v ./...
+
 script:
 - go vet $(go list ./... | grep -v /vendor/)
 - go test -v -race ./...
-- gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.version=${VERSION}"
-  -verbose ./...
+- gox -os="darwin" -arch="amd64" -output="doo.{{.OS}}.{{.Arch}}" -ldflags "-X main.version=${VERSION}" -verbose ./...
+
 defore_deploy:
 - git config --local user.name "gekalogiros"
 - git config --local user.email "foo@foo.com"
-- git tag "${VERSION}" "${TRAVIS_COMMIT}"
+- git tag "${VERSION}"
+- git push origin --tags
+
 deploy:
   provider: releases
   api_key:
