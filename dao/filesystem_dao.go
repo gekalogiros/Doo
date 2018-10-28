@@ -15,13 +15,6 @@ import (
 	"github.com/gekalogiros/Doo/model"
 )
 
-type TaskDao interface {
-	Save(n *model.Task)
-	RemoveByDate(date time.Time)
-	RetrieveByDate(date time.Time) []model.Task
-	RemovePast()
-}
-
 type filesystem struct {
 	configDir  string
 	fileFormat string
