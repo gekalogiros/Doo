@@ -15,31 +15,31 @@ This project is under development
 
 - Adding a Task
 ```
-$ doo add -d "I am a todo task. Due date is in 10 days" -dd 10d
-$ doo add -d "I am a todo task. Due date is in 1 month" -dd 1m
-$ doo add -d "I am a todo task. Due date is tomorrow" -dd 1
+$ doo add -t "I am a todo task. Due date is in 10 days" -d 10d
+$ doo add -t "I am a todo task. Due date is in 1 month" -d 1m
+$ doo add -t "I am a todo task. Due date is tomorrow" -d 1
 $ doo add "I am a todo task added in today's task list"
 ```
 
 - Lookup Task List
 ```
 $ doo ls
-$ doo ls -dt today
-$ doo ls -dt 1m
+$ doo ls -d today
+$ doo ls -d 1m
 ```
 
 - Remove Task List
 ```
-$ doo rm -dt 0
-$ doo rm -dt today
-$ doo rm -dt -1
-$ doo rm -dt -1m
+$ doo rm -d 0
+$ doo rm -d today
+$ doo rm -d -1
+$ doo rm -d -1m
 $ doo rm -past
 ```
 
-## Due Date Formats Allowed (--dd flag)
+## Date Formats Allowed (-d flag)
 
-Assuming today is 2nd of January 2018 and you want to add a todo app 1 year from now, you have the following options when defining the `-dd` (due date) flag:
+Assuming today is 2nd of January 2018 and you want to add a todo app 1 year from now, you have the following options when defining the `-d` (date) flag:
 
 ```
 12m
@@ -55,6 +55,15 @@ Assuming today is 2nd of January 2018 and you want to add a todo app 1 year from
 2-1-2019
 02-01-19
 2-1-19
+```
+
+For operations requiring dates in the past you can use the minus (-) symbol at the start
+
+```
+-5
+-5d
+-5m
+-5y
 ```
 
 # License

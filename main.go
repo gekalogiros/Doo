@@ -13,15 +13,15 @@ const (
 	errorMessageTemplate = "%s, Check documentation at github.com/gekalogiros/Doo"
 
 	AddSubCommand        = "add"
-	AddDescriptionOption = "d"
-	AddDueDateOption     = "dd"
+	AddDescriptionOption = "t"
+	AddDueDateOption     = "d"
 
 	RemoveSubCommand = "rm"
-	RemoveDateOption = "dt"
+	RemoveDateOption = "d"
 	RemovePastOption = "past"
 
 	ListSubCommand = "ls"
-	ListDateOption = "dt"
+	ListDateOption = "d"
 )
 
 var (
