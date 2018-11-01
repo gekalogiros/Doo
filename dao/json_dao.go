@@ -23,7 +23,9 @@ type taskJSON struct {
 }
 
 func NewJSONDao() TaskDao {
+
 	configDir := path.Join(os.Getenv("HOME"), ".doo")
+
 	return newJSONDao(configDir)
 }
 
@@ -45,6 +47,18 @@ func (db json) Save(task *model.Task) {
 	db.update(db.dateToString(task.Date), db.adaptFromTask(*task))
 }
 
+func (db json) Move(taskID string, from time.Time, to time.Time) {
+
+	if db.exists() {
+
+		fromDate := db.dateToString(from)
+
+		toDate := db.dateToString(to)
+
+		db.moveByID(fromDate, toDate, taskID)
+	}
+}
+
 func (db json) RemoveByDate(date time.Time) {
 
 	if db.exists() {
@@ -52,7 +66,6 @@ func (db json) RemoveByDate(date time.Time) {
 		targetDate := db.dateToString(date)
 
 		db.remove(targetDate)
-
 	}
 }
 
@@ -134,6 +147,28 @@ func (db json) remove(date string) {
 	db.persistAll(taskList)
 }
 
+func (db json) moveByID(fromDate string, toDate string, id string) {
+
+	taskList := db.findAll()
+
+	var index int
+	var taskJSON taskJSON
+
+	for i, task := range taskList[fromDate] {
+		if task.ID == id {
+			index = i
+			taskJSON = task
+			break
+		}
+	}
+
+	taskList[fromDate] = remove(taskList[fromDate], index)
+
+	taskList[toDate] = append(taskList[toDate], taskJSON)
+
+	db.persistAll(taskList)
+}
+
 func (db json) persistAll(tasks map[string][]taskJSON) {
 
 	updatedJSON, err := js.Marshal(tasks)
@@ -143,6 +178,10 @@ func (db json) persistAll(tasks map[string][]taskJSON) {
 	}
 
 	ioutil.WriteFile(db.path(), updatedJSON, 0644)
+}
+
+func remove(slice []taskJSON, s int) []taskJSON {
+	return append(slice[:s], slice[s+1:]...)
 }
 
 func (db json) adaptFromTask(task model.Task) taskJSON {

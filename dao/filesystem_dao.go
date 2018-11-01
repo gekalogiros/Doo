@@ -125,6 +125,10 @@ func (f filesystem) RetrieveByDate(date time.Time) []model.Task {
 	return []model.Task{}
 }
 
+func (f filesystem) Move(id string, source time.Time, target time.Time) {
+	log.Fatal("Filesystem Dao for Task Movements is Not Supported")
+}
+
 func readLines(path string) (lines []string, err error) {
 	var (
 		file   *os.File

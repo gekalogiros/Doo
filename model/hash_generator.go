@@ -6,7 +6,7 @@ import (
 )
 
 func generateHash() string {
-	b := make([]byte, 3)
+	b := make([]byte, 2)
 	rand.Read(b)
 	return fmt.Sprintf("%x", b)
 }

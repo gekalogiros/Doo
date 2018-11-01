@@ -63,6 +63,54 @@ func Test_json_Save(t *testing.T) {
 	}
 }
 
+func Test_json_Move(t *testing.T) {
+
+	from := time.Now()
+
+	to := time.Now().AddDate(0, 0, 1)
+
+	task := model.NewTask("description", from)
+
+	underTest := json{
+		configDir: tempConfigDir(),
+		filename:  dbFile(),
+	}
+
+	underTest.Save(&task)
+
+	type fields struct {
+		configDir string
+		filename  string
+	}
+	type args struct {
+		taskID string
+		from   time.Time
+		to     time.Time
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			"Should move tasks between task lists", args{taskID: task.Id, from: from, to: to},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+
+			underTest.Move(tt.args.taskID, tt.args.from, tt.args.to)
+
+			sourceTaskList := underTest.RetrieveByDate(tt.args.from)
+
+			assert.Empty(t, sourceTaskList)
+
+			targetTaskList := underTest.RetrieveByDate(tt.args.to)
+
+			assert.Len(t, targetTaskList, 1)
+		})
+	}
+}
+
 func Test_json_RemoveByDate(t *testing.T) {
 
 	task := model.NewTask("description", time.Now())

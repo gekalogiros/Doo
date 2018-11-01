@@ -22,6 +22,11 @@ const (
 
 	ListSubCommand = "ls"
 	ListDateOption = "d"
+
+	MoveSubCommand     = "mv"
+	MoveTaskIDOption   = "id"
+	MoveFromDateOption = "f"
+	MoveToDateOption   = "t"
 )
 
 var (
@@ -39,6 +44,16 @@ type AddCommandOptions struct {
 
 func (o AddCommandOptions) valid() bool {
 	return *o.desc != "" && *o.date != ""
+}
+
+type MoveCommandOptions struct {
+	id   *string
+	from *string
+	to   *string
+}
+
+func (m MoveCommandOptions) valid() bool {
+	return *m.id != "" && *m.from != "" && *m.to != ""
 }
 
 type RemoveCommandOptions struct {
@@ -64,6 +79,11 @@ func main() {
 	todoDescriptionPointer := addCommand.String(AddDescriptionOption, "", "task description")
 	todoDatePointer := addCommand.String(AddDueDateOption, "today", "task due date")
 
+	moveCommand := flag.NewFlagSet(MoveSubCommand, flag.ExitOnError)
+	moveIDPointer := moveCommand.String(MoveTaskIDOption, "", "task id to move (Required)")
+	moveFromDatePointer := moveCommand.String(MoveFromDateOption, "", "date of source task list (Required)")
+	moveToDatePointer := moveCommand.String(MoveToDateOption, "", "date of target task list (Required)")
+
 	removeCommand := flag.NewFlagSet(RemoveSubCommand, flag.ExitOnError)
 	removeDatePointer := removeCommand.String(RemoveDateOption, "", "Date of the task that you'd like to delete")
 	removePastPointer := removeCommand.Bool(RemovePastOption, false, "Remove all past task lists")
@@ -72,13 +92,16 @@ func main() {
 	listDatePointer := listCommand.String(ListDateOption, "today", "Date of the task list you'd like to see information for")
 
 	if len(os.Args) < 2 {
-		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s, %s", AddSubCommand, ListSubCommand, RemoveSubCommand))
+		fmt.Println(fmt.Sprintf("You need to Provide a command: %s, %s, %s, %s", AddSubCommand, MoveSubCommand, ListSubCommand, RemoveSubCommand))
 		os.Exit(1)
 	}
 
 	switch os.Args[1] {
 	case AddSubCommand:
 		addCommand.Parse(os.Args[2:])
+		break
+	case MoveSubCommand:
+		moveCommand.Parse(os.Args[2:])
 		break
 	case RemoveSubCommand:
 		removeCommand.Parse(os.Args[2:])
@@ -106,6 +129,13 @@ func main() {
 		checkArgumentsAndExecute(*addCommand, options, commands.NewTaskCreation(*options.date, *options.desc))
 	}
 
+	if moveCommand.Parsed() {
+
+		options := MoveCommandOptions{id: moveIDPointer, from: moveFromDatePointer, to: moveToDatePointer}
+
+		checkArgumentsAndExecute(*moveCommand, options, commands.NewTaskMovement(*options.id, *options.from, *options.to))
+	}
+
 	if removeCommand.Parsed() {
 
 		options := RemoveCommandOptions{date: removeDatePointer, allPast: removePastPointer}
@@ -114,6 +144,12 @@ func main() {
 	}
 
 	if listCommand.Parsed() {
+
+		args := listCommand.Args()
+
+		if len(args) == 1 && flag.Lookup(ListDateOption) == nil {
+			listDatePointer = &args[0]
+		}
 
 		options := ListCommandOptions{date: listDatePointer}
 
