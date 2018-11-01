@@ -11,6 +11,14 @@ The idea of crafting this app came after attended the "7 Principles of Productiv
 
 This project is under development
 
+# Installation
+
+- For all those who have Go in their path:
+
+```
+$ go get github.com/gekalogiros/Doo
+```
+
 ## Usage
 
 - Adding a Task
