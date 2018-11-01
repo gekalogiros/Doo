@@ -15,17 +15,22 @@ This project is under development
 
 - Adding a Task
 ```
+$ doo add "I am a todo task added in today's task list"
 $ doo add -t "I am a todo task. Due date is in 10 days" -d 10d
 $ doo add -t "I am a todo task. Due date is in 1 month" -d 1m
 $ doo add -t "I am a todo task. Due date is tomorrow" -d 1
-$ doo add "I am a todo task added in today's task list"
 ```
 
 - Lookup Task List
 ```
 $ doo ls
-$ doo ls -d today
+$ doo ls today
 $ doo ls -d 1m
+```
+
+- Moving a Task between lists
+```
+$ doo mv -f today -t tomorrow -id 53f4
 ```
 
 - Remove Task List
@@ -37,7 +42,7 @@ $ doo rm -d -1m
 $ doo rm -past
 ```
 
-## Date Formats Allowed (-d flag)
+## Date Formats Allowed (-d flag or parameter)
 
 Assuming today is 2nd of January 2018 and you want to add a todo app 1 year from now, you have the following options when defining the `-d` (date) flag:
 
@@ -57,13 +62,21 @@ Assuming today is 2nd of January 2018 and you want to add a todo app 1 year from
 2-1-19
 ```
 
-For operations requiring dates in the past you can use the minus (-) symbol at the start
+For operations requiring dates in the past you can use the minus (-) symbol at the start (mainly for removing task lists or moving tasks from past dates to today or future)
 
 ```
 -5
 -5d
 -5m
 -5y
+```
+
+Also you can use the following keywords
+
+```
+today
+tomorrow
+yesterday
 ```
 
 # License
