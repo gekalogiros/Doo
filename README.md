@@ -13,8 +13,6 @@ This project is under development
 
 # Installation
 
-- For all those who have Go in their path:
-
 ```
 $ go get github.com/gekalogiros/Doo
 ```
@@ -79,7 +77,7 @@ For operations requiring dates in the past you can use the minus (-) symbol at t
 -5y
 ```
 
-Also you can use the following keywords
+You can also use the following keywords
 
 ```
 today
